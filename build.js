@@ -17,23 +17,27 @@ const buildConfigs = [
   },
 ];
 
+const versionRegex = /^\d+(\.\d+)?(\.\d+)?(\.\d+)?$/;
 const cliArgs = process.argv.slice(2);
 
 const appVersion = (() => {
+  let version = '';
   if (cliArgs.length === 0) {
     // Fall back to Git tag for version, if no version is provided.
-    let gitVersion = childProcess.execSync(
+    version = childProcess.execSync(
       "git describe --match 'v[0-9]*' --abbrev=0 HEAD",
       {
         encoding: 'utf-8',
       },
     );
-    gitVersion = gitVersion.replace(/^v/, '').replace('\n', '');
-    console.error(`Version: ${gitVersion}`);
-    return gitVersion;
+  } else {
+    version = cliArgs[0];
   }
 
-  const version = cliArgs[0];
+  version = version.replace(/^v/, '').replace('\n', '');
+  if (!versionRegex.test(version)) {
+    throw new Error(`Invalid version format: ${version}`)
+  }
   console.error(`Version: ${version}`);
   return version;
 })();
