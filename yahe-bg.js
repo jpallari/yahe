@@ -1,5 +1,6 @@
 /* global chrome, browser */
-const isChrome = typeof chrome !== 'undefined' && typeof browser === 'undefined';
+const isChrome =
+  typeof chrome !== 'undefined' && typeof browser === 'undefined';
 
 const defaults = {
   focusOnNewTab: false,
@@ -39,7 +40,10 @@ function openLink(options, sender, { url }) {
   const params = {
     url,
     active: options.focusOnNewTab,
-    index: nextTabIndexFromCurrentIndex(options.newTabPosition, currentTabIndex),
+    index: nextTabIndexFromCurrentIndex(
+      options.newTabPosition,
+      currentTabIndex,
+    ),
   };
   if (isChrome) {
     chrome.tabs.create(params);
@@ -62,8 +66,8 @@ function loadStorage(f) {
 
 function messageHandler(message, sender) {
   if (isValidMessage(message)) {
-    loadStorage(
-      (options) => openLink({ ...defaults, ...options }, sender, message),
+    loadStorage((options) =>
+      openLink({ ...defaults, ...options }, sender, message),
     );
   }
 }

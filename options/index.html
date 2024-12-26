@@ -1,111 +1,144 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
 
-<head>
-  <meta charset="utf-8" />
-  <style>
-    ul {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-    }
+      li {
+        margin: 4px;
+      }
 
-    li {
-      margin: 4px;
-    }
+      fieldset {
+        margin: 4px;
+      }
+    </style>
+  </head>
 
-    fieldset {
-      margin: 4px;
-    }
-  </style>
-</head>
-
-<body>
-  <form>
-    <ul>
-      <li>
-        <label for="hintcharacters">
-          Hint characters: <input type="text" id="hintcharacters" />
-        </label>
-      </li>
-      <li>
-        <label for="activate_key">
-          Shortcut key: <input type="text" id="activate_key" />
-        </label>
-      </li>
-      <li>
-        <label for="focus_on_newtab">
-          Focus on new tab: <input type="checkbox" checked="false" id="focus_on_newtab" />
-        </label>
-      </li>
-    </ul>
-    <fieldset>
-      <legend>Modifier for shortcut key</legend>
+  <body>
+    <form>
       <ul>
         <li>
-          <label for="mod_ctrl">
-            <input type="radio" value="ctrl" name="mod" checked="true" id="mod_ctrl" />
-            Ctrl
+          <label for="hintcharacters">
+            Hint characters:
+            <input type="text" id="hintcharacters" />
           </label>
         </li>
         <li>
-          <label for="mod_alt">
-            <input type="radio" value="alt" name="mod" id="mod_alt" />
-            Alt
+          <label for="activate_key">
+            Shortcut key: <input type="text" id="activate_key" />
           </label>
         </li>
         <li>
-          <label for="mod_meta">
-            <input type="radio" value="meta" name="mod" id="mod_meta" />
-            Meta / Command
+          <label for="focus_on_newtab">
+            Focus on new tab:
+            <input type="checkbox" checked="false" id="focus_on_newtab" />
           </label>
         </li>
       </ul>
-    </fieldset>
-    <fieldset>
-      <legend>After I hit a hint...</legend>
-      <ul>
-        <li>
-          <label for="deactivate_normal">
-            <input type="radio" value="normal" name="deactivate" checked="true" id="deactivate_normal" />
-            keep the hints on screen so I can hit another one
-          </label>
-        </li>
-        <li>
-          <label for="deactivate_always">
-            <input type="radio" value="always" name="deactivate" id="deactivate_always" />
-            hide the hints
-          </label>
-        </li>
-      </ul>
-    </fieldset>
-    <fieldset>
-      <legend>New tab position</legend>
-      <ul>
-        <li>
-          <label for="newTabPosition_default">
-            <input type="radio" value="relatedAfterCurrent" name="newTabPosition" checked="true" id="newTabPosition_default" />
-            Let the browser decide
-          </label>
-        </li>
-        <li>
-          <label for="newTabPosition_afterCurrent">
-            <input type="radio" value="afterCurrent" name="newTabPosition" id="newTabPosition_afterCurrent" />
-            Next to the current tab
-          </label>
-        </li>
-        <li>
-          <label for="newTabPosition_atEnd">
-            <input type="radio" value="atEnd" name="newTabPosition" id="newTabPosition_atEnd" />
-            At the end of the tab strip
-          </label>
-        </li>
-      </ul>
-    </fieldset>
-    <input type="submit" value="Save" id="save" />
-    <span id="status"></span>
-  </form>
-  <script src="options.js"></script>
-</body>
-
+      <fieldset>
+        <legend>Modifier for shortcut key</legend>
+        <ul>
+          <li>
+            <label for="mod_ctrl">
+              <input
+                type="radio"
+                value="ctrl"
+                name="mod"
+                checked="true"
+                id="mod_ctrl"
+              />
+              Ctrl
+            </label>
+          </li>
+          <li>
+            <label for="mod_alt">
+              <input type="radio" value="alt" name="mod" id="mod_alt" />
+              Alt
+            </label>
+          </li>
+          <li>
+            <label for="mod_meta">
+              <input type="radio" value="meta" name="mod" id="mod_meta" />
+              Meta / Command
+            </label>
+          </li>
+        </ul>
+      </fieldset>
+      <fieldset>
+        <legend>After I hit a hint...</legend>
+        <ul>
+          <li>
+            <label for="deactivate_normal">
+              <input
+                type="radio"
+                value="normal"
+                name="deactivate"
+                checked="true"
+                id="deactivate_normal"
+              />
+              keep the hints on screen so I can hit another one
+            </label>
+          </li>
+          <li>
+            <label for="deactivate_always">
+              <input
+                type="radio"
+                value="always"
+                name="deactivate"
+                id="deactivate_always"
+              />
+              hide the hints
+            </label>
+          </li>
+        </ul>
+      </fieldset>
+      <fieldset>
+        <legend>New tab position</legend>
+        <ul>
+          <li>
+            <label for="newTabPosition_default">
+              <input
+                type="radio"
+                value="relatedAfterCurrent"
+                name="newTabPosition"
+                checked="true"
+                id="newTabPosition_default"
+              />
+              Let the browser decide
+            </label>
+          </li>
+          <li>
+            <label for="newTabPosition_afterCurrent">
+              <input
+                type="radio"
+                value="afterCurrent"
+                name="newTabPosition"
+                id="newTabPosition_afterCurrent"
+              />
+              Next to the current tab
+            </label>
+          </li>
+          <li>
+            <label for="newTabPosition_atEnd">
+              <input
+                type="radio"
+                value="atEnd"
+                name="newTabPosition"
+                id="newTabPosition_atEnd"
+              />
+              At the end of the tab strip
+            </label>
+          </li>
+        </ul>
+      </fieldset>
+      <input type="submit" value="Save" id="save" />
+      <span id="status"></span>
+    </form>
+    <script src="options.js"></script>
+  </body>
 </html>

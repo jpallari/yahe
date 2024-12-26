@@ -1,5 +1,6 @@
 /* global chrome, browser */
-const isChrome = typeof chrome !== 'undefined' && typeof browser === 'undefined';
+const isChrome =
+  typeof chrome !== 'undefined' && typeof browser === 'undefined';
 
 const defaults = {
   activateModifier: 'ctrl',
@@ -36,9 +37,13 @@ function selectedDeactivate() {
 function showStatus() {
   const status = document.getElementById('status');
   status.textContent = 'Options saved';
-  window.setTimeout(() => {
-    status.textContent = '';
-  }, 750, false);
+  window.setTimeout(
+    () => {
+      status.textContent = '';
+    },
+    750,
+    false,
+  );
 }
 
 function saveOptions(e) {
@@ -70,8 +75,10 @@ function restoreOptions() {
     opt('deactivate_normal').checked = !options.deactivateAfterHit;
     opt('deactivate_always').checked = options.deactivateAfterHit;
     opt('focus_on_newtab').checked = options.focusOnNewTab;
-    opt('newTabPosition_default').checked = options.newTabPosition === 'relatedAfterCurrent';
-    opt('newTabPosition_afterCurrent').checked = options.newTabPosition === 'afterCurrent';
+    opt('newTabPosition_default').checked =
+      options.newTabPosition === 'relatedAfterCurrent';
+    opt('newTabPosition_afterCurrent').checked =
+      options.newTabPosition === 'afterCurrent';
     opt('newTabPosition_atEnd').checked = options.newTabPosition === 'atEnd';
   }
 

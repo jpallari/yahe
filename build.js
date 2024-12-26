@@ -17,7 +17,7 @@ const buildConfigs = [
 
 const gitVersion = (() => {
   const version = childProcess.execSync(
-    'git describe --match \'v[0-9]*\' --abbrev=0 HEAD',
+    "git describe --match 'v[0-9]*' --abbrev=0 HEAD",
     {
       encoding: 'utf-8',
     },
@@ -27,9 +27,9 @@ const gitVersion = (() => {
 
 async function buildManifest(target, sources) {
   // Read manifest files
-  const manifestContents = await Promise.all(sources.map(
-    (filename) => fs.readFileSync(filename, 'utf-8'),
-  ));
+  const manifestContents = await Promise.all(
+    sources.map((filename) => fs.readFileSync(filename, 'utf-8')),
+  );
 
   // Merge manifests
   const manifest = {};
@@ -41,10 +41,7 @@ async function buildManifest(target, sources) {
   manifest.version = gitVersion;
 
   // Write manifest to target
-  await fs.writeFile(
-    target,
-    JSON.stringify(manifest, null, 4),
-  );
+  await fs.writeFile(target, JSON.stringify(manifest, null, 4));
 }
 
 async function wrapJs(filename) {
@@ -98,9 +95,9 @@ async function buildExtensionPackage(config) {
 }
 
 async function writeSha256File(files) {
-  const contents = files.map(
-    ([filename, hash]) => `${hash} ${filename}`,
-  ).join('\n');
+  const contents = files
+    .map(([filename, hash]) => `${hash} ${filename}`)
+    .join('\n');
   return fs.writeFile(`${OUTPUTDIR}/sha256sums.txt`, contents);
 }
 

@@ -43,11 +43,16 @@ const parseOptions = (() => {
     const raw = rawOpts || {};
     return {
       activateKey: getActivateKey(raw) || defaultOptions.activateKey,
-      activateModifier: getActivateModifier(raw) || defaultOptions.activateModifier,
-      hintCharacters: typeof raw.hintCharacters === 'string'
-        ? raw.hintCharacters : defaultOptions.hintCharacters,
-      deactivateAfterHit: typeof raw.deactivateAfterHit === 'boolean'
-        ? raw.deactivateAfterHit : defaultOptions.deactivateAfterHit,
+      activateModifier:
+        getActivateModifier(raw) || defaultOptions.activateModifier,
+      hintCharacters:
+        typeof raw.hintCharacters === 'string'
+          ? raw.hintCharacters
+          : defaultOptions.hintCharacters,
+      deactivateAfterHit:
+        typeof raw.deactivateAfterHit === 'boolean'
+          ? raw.deactivateAfterHit
+          : defaultOptions.deactivateAfterHit,
     };
   };
 })();
@@ -196,16 +201,15 @@ function KeyMapper(window) {
     document.addEventListener('keydown', h, true);
   }
 
-  function noModifiers({
-    shiftKey, ctrlKey, metaKey, altKey,
-  }) {
+  function noModifiers({ shiftKey, ctrlKey, metaKey, altKey }) {
     return !shiftKey && !ctrlKey && !metaKey && !altKey;
   }
 
   self.addHandler = (keyCode, modifiers, handler) => {
     const modifierSet = new Set(modifiers);
     addKeyDownHandler(
-      window, handler,
+      window,
+      handler,
       (e) => e.keyCode === keyCode && modifiersMatch(modifierSet, e),
     );
   };
@@ -229,8 +233,15 @@ const hintableSelectors = [
 // Set of all the input types that can be focused on using hints
 // instead of activating them.
 const inputTypes = new Set([
-  'text', 'password', 'search', 'tel', 'url', 'email',
-  'number', 'datetime', 'datetime-local',
+  'text',
+  'password',
+  'search',
+  'tel',
+  'url',
+  'email',
+  'number',
+  'datetime',
+  'datetime-local',
 ]);
 
 // IDs and class names used for YAHE DOM elements
@@ -250,7 +261,8 @@ function Hint(window, click, hintId, hintable) {
     const cr = hintable.getBoundingClientRect();
     const span = document.createElement('span');
     const spanTop = pageYOffset + (cr.top > 0 ? cr.top : 0);
-    const spanLeft = pageXOffset + (cr.left > 0 ? cr.left : 0) - span.offsetWidth;
+    const spanLeft =
+      pageXOffset + (cr.left > 0 ? cr.left : 0) - span.offsetWidth;
 
     span.textContent = hintId;
     span.className = hintClass;
@@ -285,24 +297,19 @@ function Hint(window, click, hintId, hintable) {
 // Check if the given node is within view port
 function inViewPort(node) {
   const cr = node.getBoundingClientRect();
-  return (cr.bottom > 0 && cr.right > 0
-    && cr.width > 0 && cr.height > 0);
+  return cr.bottom > 0 && cr.right > 0 && cr.width > 0 && cr.height > 0;
 }
 
 // Checks if the given target should be opened in a new tab
 function shouldOpenInTab({ navigator }, { href }, { metaKey, ctrlKey }) {
-  const isUrl = (
-    typeof href === 'string' && href !== '' && !href.endsWith('/#')
-  );
+  const isUrl = typeof href === 'string' && href !== '' && !href.endsWith('/#');
   const isMac = navigator.appVersion.includes('Mac');
   const isOpenNewTabClick = (isMac && metaKey) || ctrlKey;
   return isUrl && isOpenNewTabClick;
 }
 
 // Simulate a mouse click on a DOM element
-function simulateClick(relatedTarget, {
-  ctrlKey, altKey, shiftKey, metaKey,
-}) {
+function simulateClick(relatedTarget, { ctrlKey, altKey, shiftKey, metaKey }) {
   const event = new MouseEvent('click', {
     ctrlKey,
     altKey,
@@ -314,9 +321,7 @@ function simulateClick(relatedTarget, {
 }
 
 // Click simulator with alternative new tab behaviour
-function doClick({
-  window, target, mods, openInTab,
-}) {
+function doClick({ window, target, mods, openInTab }) {
   if (shouldOpenInTab(window, target, mods)) {
     openInTab(target.href);
   } else {
@@ -354,7 +359,10 @@ function Engine(window, state, hintIdGenerator, env, options) {
   // Perform a click action on the given element with the given keyboard modifiers
   function clicker(target, mods) {
     doClick({
-      window, target, mods, openInTab,
+      window,
+      target,
+      mods,
+      openInTab,
     });
   }
 
@@ -422,24 +430,30 @@ function Engine(window, state, hintIdGenerator, env, options) {
     state.whenActive(self.deactivate);
   };
 
-  self.clickCurrentHint = (e) => state.whenActive(() => {
-    state.withCurrentHint((h) => {
-      h.activate(e);
-      if (h.shouldFocus() || options.deactivateAfterHit) {
-        self.deactivate();
+  self.clickCurrentHint = (e) =>
+    state.whenActive(() => {
+      state.withCurrentHint((h) => {
+        h.activate(e);
+        if (h.shouldFocus() || options.deactivateAfterHit) {
+          self.deactivate();
+        }
+      });
+      clearInput();
+    });
+
+  self.addCharacter = ({ keyCode }) =>
+    state.whenActive(() => {
+      const c = String.fromCharCode(keyCode).toLowerCase();
+      if (hintIdGenerator.includes(c)) {
+        state.withCurrentHint((h) => {
+          h.dehighlight();
+        });
+        state.addInput(c);
+        state.withCurrentHint((h) => {
+          h.highlight();
+        });
       }
     });
-    clearInput();
-  });
-
-  self.addCharacter = ({ keyCode }) => state.whenActive(() => {
-    const c = String.fromCharCode(keyCode).toLowerCase();
-    if (hintIdGenerator.includes(c)) {
-      state.withCurrentHint((h) => { h.dehighlight(); });
-      state.addInput(c);
-      state.withCurrentHint((h) => { h.highlight(); });
-    }
-  });
 }
 
 // Boot is the entrypoint for all browser versions of YAHE
@@ -511,5 +525,5 @@ function boot(window, options, env) {
     return;
   }
 
-  console.log('yahe: unknown browser!'); // eslint-disable-line no-console
+  console.error('yahe: unknown browser!');
 })();

@@ -12,21 +12,13 @@
     "48": "icons/icon48.png",
     "128": "icons/icon128.png"
   },
-  "permissions": [
-    "storage",
-    "http://*/*",
-    "https://*/*"
-  ],
+  "permissions": ["storage", "http://*/*", "https://*/*"],
   "content_scripts": [
     {
       "match_about_blank": true,
-      "matches": [
-        "http://*/*",
-        "https://*/*",
-        "file://*/*"
-      ],
-      "css": [ "yahe.css" ],
-      "js": [ "yahe.js" ],
+      "matches": ["http://*/*", "https://*/*", "file://*/*"],
+      "css": ["yahe.css"],
+      "js": ["yahe.js"],
       "run_at": "document_end",
       "all_frames": true
     }
