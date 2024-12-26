@@ -36,7 +36,7 @@ const appVersion = (() => {
 
   version = version.replace(/^v/, '').replace('\n', '');
   if (!versionRegex.test(version)) {
-    throw new Error(`Invalid version format: ${version}`)
+    throw new Error(`Invalid version format: ${version}`);
   }
   console.error(`Version: ${version}`);
   return version;
