@@ -1,7 +1,9 @@
 const archiver = require('archiver');
-const childProcess = require('child_process');
-const crypto = require('crypto');
-const fs = require('fs-extra');
+const childProcess = require('node:child_process');
+const crypto = require('node:crypto');
+const fs = require('node:fs');
+const fsp = require('node:fs/promises');
+const process = require('node:process');
 
 const OUTPUTDIR = 'output';
 const buildConfigs = [
@@ -15,20 +17,31 @@ const buildConfigs = [
   },
 ];
 
-const gitVersion = (() => {
-  const version = childProcess.execSync(
-    "git describe --match 'v[0-9]*' --abbrev=0 HEAD",
-    {
-      encoding: 'utf-8',
-    },
-  );
-  return version.replace(/^v/, '').replace('\n', '');
+const cliArgs = process.argv.slice(2);
+
+const appVersion = (() => {
+  if (cliArgs.length === 0) {
+    // Fall back to Git tag for version, if no version is provided.
+    let gitVersion = childProcess.execSync(
+      "git describe --match 'v[0-9]*' --abbrev=0 HEAD",
+      {
+        encoding: 'utf-8',
+      },
+    );
+    gitVersion = gitVersion.replace(/^v/, '').replace('\n', '');
+    console.error(`Version: ${gitVersion}`);
+    return gitVersion;
+  }
+
+  const version = cliArgs[0];
+  console.error(`Version: ${version}`);
+  return version;
 })();
 
 async function buildManifest(target, sources) {
   // Read manifest files
   const manifestContents = await Promise.all(
-    sources.map((filename) => fs.readFileSync(filename, 'utf-8')),
+    sources.map((filename) => fsp.readFile(filename, 'utf-8')),
   );
 
   // Merge manifests
@@ -38,24 +51,24 @@ async function buildManifest(target, sources) {
   });
 
   // Set version
-  manifest.version = gitVersion;
+  manifest.version = appVersion;
 
   // Write manifest to target
-  await fs.writeFile(target, JSON.stringify(manifest, null, 4));
+  await fsp.writeFile(target, JSON.stringify(manifest, null, 4));
 }
 
 async function wrapJs(filename) {
-  const js = await fs.readFile(filename, 'utf-8');
+  const js = await fsp.readFile(filename, 'utf-8');
   return `(function() {${js}}());`;
 }
 
 async function createCommonResources(outdir) {
-  await fs.mkdirp(outdir);
-  await fs.copy('images/icons/', `${outdir}/icons`);
-  await fs.copy('options/', `${outdir}/options`);
-  await fs.copy('yahe.css', `${outdir}/yahe.css`);
-  await fs.writeFile(`${outdir}/yahe.js`, await wrapJs('yahe.js'));
-  await fs.writeFile(`${outdir}/yahe-bg.js`, await wrapJs('yahe-bg.js'));
+  await fsp.mkdir(outdir, { recursive: true });
+  await fsp.cp('images/icons/', `${outdir}/icons`, { recursive: true });
+  await fsp.cp('options/', `${outdir}/options`, { recursive: true });
+  await fsp.cp('yahe.css', `${outdir}/yahe.css`, { recursive: true });
+  await fsp.writeFile(`${outdir}/yahe.js`, await wrapJs('yahe.js'));
+  await fsp.writeFile(`${outdir}/yahe-bg.js`, await wrapJs('yahe-bg.js'));
 }
 
 async function zipDirectory(directory, filename) {
@@ -73,7 +86,7 @@ function zipFilename(config) {
 
 async function sha256sumForFile(filename) {
   const sum = crypto.createHash('sha256');
-  const contents = await fs.readFile(filename);
+  const contents = await fsp.readFile(filename);
   sum.update(contents);
   return sum.digest('hex');
 }
@@ -98,13 +111,13 @@ async function writeSha256File(files) {
   const contents = files
     .map(([filename, hash]) => `${hash} ${filename}`)
     .join('\n');
-  return fs.writeFile(`${OUTPUTDIR}/sha256sums.txt`, contents);
+  return fsp.writeFile(`${OUTPUTDIR}/sha256sums.txt`, contents);
 }
 
 async function main() {
   const output = await Promise.all(buildConfigs.map(buildExtensionPackage));
   await writeSha256File(output);
-  await fs.writeFile(`${OUTPUTDIR}/version.txt`, gitVersion);
+  await fsp.writeFile(`${OUTPUTDIR}/version.txt`, appVersion);
 }
 
 main();
