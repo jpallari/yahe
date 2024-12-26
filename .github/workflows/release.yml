@@ -1,0 +1,26 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+run-name: Release - ${{ github.ref_name }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Build
+        uses: ./.github/actions/build
+        with:
+          version: ${{ github.ref_name }}
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            ./output/*.txt
+            ./output/*.zip
+
