@@ -1,4 +1,7 @@
 {
+  "background": {
+    "scripts": ["yahe-bg.js"]
+  },
   "browser_specific_settings": {
     "gecko": {
       "id": "yahe@lepo"

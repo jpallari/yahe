@@ -1,18 +1,19 @@
 {
   "name": "Yet Another Hints Extension",
   "short_name": "YAHE",
-  "manifest_version": 2,
+  "manifest_version": 3,
   "description": "A simple hit-a-hint extension",
   "options_ui": {
     "page": "options/index.html",
-    "chrome_style": true
+    "open_in_tab": false
   },
   "icons": {
     "16": "icons/icon16.png",
     "48": "icons/icon48.png",
     "128": "icons/icon128.png"
   },
-  "permissions": ["storage", "http://*/*", "https://*/*"],
+  "host_permissions": ["*://*/*"],
+  "permissions": ["storage"],
   "content_scripts": [
     {
       "match_about_blank": true,
@@ -22,8 +23,5 @@
       "run_at": "document_end",
       "all_frames": true
     }
-  ],
-  "background": {
-    "scripts": ["yahe-bg.js"]
-  }
+  ]
 }
