@@ -13,7 +13,7 @@ const buildConfigs = [
   },
   {
     name: 'chrome',
-    extraManifests: [],
+    extraManifests: ['manifest.chrome.json'],
   },
 ];
 
@@ -50,9 +50,9 @@ async function buildManifest(target, sources) {
 
   // Merge manifests
   const manifest = {};
-  manifestContents.forEach((contents) => {
+  for (const contents of manifestContents) {
     Object.assign(manifest, JSON.parse(contents));
-  });
+  }
 
   // Set version
   manifest.version = appVersion;
