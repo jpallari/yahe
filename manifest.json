@@ -1,7 +1,6 @@
 {
   "name": "Yet Another Hints Extension",
   "short_name": "YAHE",
-  "manifest_version": 3,
   "description": "A simple hit-a-hint extension",
   "options_ui": {
     "page": "options/index.html",
@@ -12,8 +11,6 @@
     "48": "icons/icon48.png",
     "128": "icons/icon128.png"
   },
-  "host_permissions": ["*://*/*"],
-  "permissions": ["storage"],
   "content_scripts": [
     {
       "match_about_blank": true,
