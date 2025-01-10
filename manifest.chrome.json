@@ -1,4 +1,7 @@
 {
+  "manifest_version": 3,
+  "host_permissions": ["*://*/*"],
+  "permissions": ["storage"],
   "background": {
     "service_worker": "yahe-bg.js"
   }
