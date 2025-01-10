@@ -72,7 +72,7 @@ If you want to change the default settings for the script,
 change the values in `yahe.js` source file.
 Remember to rebuild after changing the values.
 
-You can also test and check the code for lint errors using [NPM][]:
+You can also test and check the code for lint errors using NPM:
 
 ```shell
 npm install
