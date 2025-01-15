@@ -93,7 +93,7 @@ extensions that worked as an inspiration for YAHE:
 2-clause BSD license. See [LICENSE](LICENSE) for more details.
 
 [cws]: https://chrome.google.com/webstore/detail/eimkmfhfckmajkednnnhkacajflcjinm
-[ffao]: https://addons.mozilla.org/en-US/firefox/addon/yet-another-hints-extension/
+[ffao]: https://addons.mozilla.org/en-US/firefox/addon/yahe
 [edgeao]: https://microsoftedge.microsoft.com/addons/detail/yet-another-hints-extensi/oblcogekcgnkimamhnekiohhikomblod
 [git]: https://git-scm.com/
 [hhopera]: https://github.com/hogelog/hit-a-hint-opera
