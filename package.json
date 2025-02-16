@@ -16,14 +16,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://gitlab.com/lepovirta/yahe.git"
+    "url": "git+https://github.com/jpallari/yahe.git"
   },
   "author": "Jaakko Pallari",
   "license": "BSD-2-Clause",
   "bugs": {
-    "url": "https://gitlab.com/lepovirta/yahe/-/issues"
+    "url": "https://github.com/jpallari/yahe/issues"
   },
-  "homepage": "https://gitlab.com/lepovirta/yahe#readme",
+  "homepage": "https://github.com/jpallari/yahe#readme",
   "devDependencies": {
     "@eslint/js": "^9.17.0",
     "archiver": "^7.0.1",
